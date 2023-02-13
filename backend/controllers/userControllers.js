@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 
 const User = require('../models/userModel')
 
@@ -29,18 +30,31 @@ const registerUser = async (req, res) => {
     return res.status(400).json({ error: 'users exists' })
   }
 
-  const user = await User.create({ email, password })
+  const salt = await bcrypt.genSalt(10)
+  const hash = await bcrypt.hash(password, salt)
+
+  const user = await User.create({ email, password: hash })
   res.status(200).json({ created: user })
 }
 
-const loginUser = (req, res) => {
+const loginUser = async (req, res) => {
   const { email, password } = req.body
 
   if (!email || !password) {
+    return res.status(200).json({ error: 'All fields required' })
+  }
+
+  const user = await User.findOne({ email })
+  if (!user) {
     return res.status(200).json({ error: 'Invalid credentials' })
   }
 
-  const user = res.status(200).json({ message: 'login user controller' })
+  const match = await bcrypt.compare(password, user.password)
+  if (!match) {
+    return res.status(400).json({ error: 'Invalid credentials' })
+  }
+
+  res.status(200).json({ loggedIn: user })
 }
 
 const getUser = (req, res) => {
