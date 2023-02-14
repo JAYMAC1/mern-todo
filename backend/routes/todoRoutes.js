@@ -1,4 +1,5 @@
 const express = require('express')
+const requireAuth = require('../middleware/requireAuth')
 const {
   getAllTodosController,
   getSingleTodoController,
@@ -8,6 +9,9 @@ const {
 } = require('../controllers/todoControllers')
 
 const router = express.Router()
+
+// check for authorization
+router.use(requireAuth)
 
 // get all workouts
 router.get('/', getAllTodosController)
