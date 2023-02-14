@@ -13,8 +13,11 @@ const requireAuth = async (req, res, next) => {
     req.user = await User.findOne({ _id }).select('_id')
     next()
   } catch (error) {
-    console.log(error)
-    res.status(401).json({ error: 'Request is not authorised!!' })
+    if (error instanceof jwt.TokenExpiredError) {
+      res.status(401).json({ error: 'Token Expired' })
+    } else {
+      res.status(401).json({ error: 'Request is not authorised!!' })
+    }
   }
 }
 
