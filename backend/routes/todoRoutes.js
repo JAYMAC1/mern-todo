@@ -11,7 +11,7 @@ const {
 const router = express.Router()
 
 // check for authorization
-router.use(requireAuth)
+// router.use(requireAuth)
 
 // get all workouts
 router.get('/', getAllTodosController)
