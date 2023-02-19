@@ -4,8 +4,8 @@ const Home = () => {
   const [todos, setTodos] = useState(null)
   useEffect(() => {
     const fetchTodos = async () => {
-      const response = await fetch('http://localhost:4000/api/todos')
-      const json = await response.json
+      const response = await fetch('/api/todos')
+      const json = await response.json()
 
       if (response.ok) {
         setTodos(json)
@@ -18,7 +18,7 @@ const Home = () => {
   return (
     <div className='home'>
       <div className='todos'>
-        {todos && todos.map((todo) => <p key={todo._id}>{todo.title}</p>)}
+        {todos && todos.map((todo) => <p key={todo._id}>{todo.task}</p>)}
       </div>
     </div>
   )
