@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
+// components
+import TodoDetails from '../components/TodoDetails'
+
 const Home = () => {
   const [todos, setTodos] = useState(null)
   useEffect(() => {
@@ -18,7 +21,8 @@ const Home = () => {
   return (
     <div className='home'>
       <div className='todos'>
-        {todos && todos.map((todo) => <p key={todo._id}>{todo.task}</p>)}
+        {todos &&
+          todos.map((todo) => <TodoDetails key={todo._id} todo={todo} />)}
       </div>
     </div>
   )
