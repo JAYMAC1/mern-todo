@@ -9,6 +9,10 @@ const todoDetails = ({ todo }) => {
         {todo.status}
       </p>
       <p>
+        <strong>Start Date: </strong>
+        {todo.startDate}
+      </p>
+      <p>
         <strong>Due Date: </strong>
         {todo.dueDate}
       </p>

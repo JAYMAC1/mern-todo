@@ -11,13 +11,36 @@ const statusOptions = [
 const TodoForm = () => {
   const [task, setTask] = useState('')
   const [status, setStatus] = useState('Pending')
+  const [startDate, setStartDate] = useState('')
   const [dueDate, setDueDate] = useState('')
+  const [error, setError] = useState(null)
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    console.log('Task Name:', task)
-    console.log('Status:', status)
-    console.log('Due Date:', dueDate)
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const todo = { task, status: status, startDate, dueDate }
+    console.log(todo)
+
+    const response = await fetch('/api/todos', {
+      method: 'POST',
+      body: JSON.stringify(todo),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const json = await response.json()
+    if (!response.ok) {
+      setError(json.error)
+    }
+
+    if (response.ok) {
+      setDueDate('')
+      setStartDate('')
+      setStatus('')
+      setTask('')
+      setError(null)
+      console.log('new todo created', json)
+    }
   }
   return (
     <form className='create' onSubmit={handleSubmit}>
@@ -32,8 +55,14 @@ const TodoForm = () => {
       <label>Status:</label>
       <Select
         options={statusOptions}
-        value={status}
-        onChange={(e) => setStatus(e.target)}
+        onChange={(option) => setStatus(option.value)}
+      />
+      <label>Start Date:</label>
+      <input
+        type='date'
+        onChange={(e) => setStartDate(e.target.value)}
+        value={startDate}
+        required
       />
       <label>Due Date:</label>
       <input
@@ -42,11 +71,6 @@ const TodoForm = () => {
         value={dueDate}
         required
       />
-      {/* <DatePicker
-        selected={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-        value={dueDate}
-      /> */}
       <button type='submit'>Add Task</button>
     </form>
   )
