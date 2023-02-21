@@ -54,8 +54,11 @@ const TodoForm = () => {
       />
       <label>Status:</label>
       <Select
+        className='select-options'
         options={statusOptions}
+        defaultValue={statusOptions}
         onChange={(option) => setStatus(option.value)}
+        isRequired
       />
       <label>Start Date:</label>
       <input
